@@ -27,7 +27,10 @@ jobs:
         
         # Maquina/Ambiente onde o trabalho/job será executado
         runs-on: ubuntu-latest
-
+        
+        # Condição para executar o job apenas se o pipeline anterior foi concluído com sucesso
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        
         # Passos do script build
         # Cada passo é uma ação que será executada
         steps:
@@ -60,4 +63,11 @@ jobs:
           # Execução dos testes E2E
           - name: 'Executando testes E2E'
             run: yarn run e2e
+
+          - uses: actions/upload-artifact@v4
+            # Se o job não foi cancelado, roda a ação de upload do relatório
+            if: ${{ !cancelled() }}  
+            with:
+              name: relarotio
+              path: ./playwright-report
         
