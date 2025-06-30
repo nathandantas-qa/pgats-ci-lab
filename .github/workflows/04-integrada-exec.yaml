@@ -30,6 +30,7 @@ jobs:
 
   unidade:
     runs-on: ubuntu-latest # Maquina/Ambiente onde o trabalho/job será executado
+    needs: [inspecao] # Este job depende que o job 'inspecao' seja concluído com sucesso
 
     steps:
       - uses: actions/checkout@v4 # Ação de checkout do código fonte do repositório
@@ -45,6 +46,7 @@ jobs:
 
   e2e-tests:
     runs-on: ubuntu-latest # Maquina/Ambiente onde o trabalho/job será executado
+    needs: [unidade] # Este job depende que o job 'unidade' seja concluído com sucesso
 
     steps:
       # Ação de checkout do código fonte do repositório
@@ -82,6 +84,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest # Maquina/Ambiente onde o trabalho/job será executado
+    needs: [e2e-tests] # Este job depende que o job 'e2e-tests' seja concluído com sucesso
 
     steps:
       - name: 'Simulação do Deploy'
