@@ -8,84 +8,81 @@ name: 'CI - Exercucao Integrada'
 # Gatilho de execução agendada = schedule
 # Gatilho de execução apartir de outro pipe = workflow_run
 
-
-
 on:
-  workflow_dispatch:  # Gatilho de execução manual
+  workflow_dispatch: # Gatilho de execução manual
 
 # trabalhos/tarefas dentro do pipeline = jobs
 jobs:
-    inspecao:
-      runs-on: ubuntu-latest  # Maquina/Ambiente onde o trabalho/job será executado
-      
-      steps:
-        - uses: actions/checkout@v4  # Ação de checkout do código fonte do repositório
+  inspecao:
+    runs-on: ubuntu-latest # Maquina/Ambiente onde o trabalho/job será executado
 
-        - name: 'instalando yarn'
-          run: npm install -g yarn  # Instalação do Yarn  
+    steps:
+      - uses: actions/checkout@v4 # Ação de checkout do código fonte do repositório
 
-        - name: 'instalando dependencias'
-          run: yarn  # Instalação das dependências do projeto
+      - name: 'instalando yarn'
+        run: npm install -g yarn # Instalação do Yarn
 
-        - name: 'checando padronizacao de codigo'
-          run: yarn lint  # Checagem de padronização de código com ESLint
+      - name: 'instalando dependencias'
+        run: yarn # Instalação das dependências do projeto
 
+      - name: 'checando padronizacao de codigo'
+        run: yarn lint # Checagem de padronização de código com ESLint
 
-    unidade:
-      runs-on: ubuntu-latest  # Maquina/Ambiente onde o trabalho/job será executado
+  unidade:
+    runs-on: ubuntu-latest # Maquina/Ambiente onde o trabalho/job será executado
 
-      steps:
-        - uses: actions/checkout@v4  # Ação de checkout do código fonte do repositório
+    steps:
+      - uses: actions/checkout@v4 # Ação de checkout do código fonte do repositório
 
-        - name: 'instalando yarn'
-          run: npm install -g yarn  # Instalação do Yarn  
+      - name: 'instalando yarn'
+        run: npm install -g yarn # Instalação do Yarn
 
-        - name: 'instalando dependencias'
-          run: yarn  # Instalação das dependências do projeto
+      - name: 'instalando dependencias'
+        run: yarn # Instalação das dependências do projeto
 
-        - name: 'Executando testes unitarios'
-          run: yarn test  # Execução dos testes unitários com Jest
-      
-    e2e-tests:
-      runs-on: ubuntu-latest  # Maquina/Ambiente onde o trabalho/job será executado
+      - name: 'Executando testes unitarios'
+        run: yarn test # Execução dos testes unitários com Jest
 
-      steps:
-        # Ação de checkout do código fonte do repositório 
-        - uses: actions/checkout@v4
-        
-        # Instalacao do node
-        - name: 'Setup Node.js'
-          uses: actions/setup-node@v4
-          with:
-            node-version: '22.x'  # Versão do Node.js a ser usada
+  e2e-tests:
+    runs-on: ubuntu-latest # Maquina/Ambiente onde o trabalho/job será executado
 
-        # Instalacao do Yarn
-        - name: 'Instalando Yarn'
-          run: npm install -g yarn
-      
-        # Instalação das dependências
-        - name: 'Instalando dependencias'
-          run: yarn
-          
-        # instalacap dp Playwright
-        - name: 'Instalando Playwright'
-          run: yarn playwright install
+    steps:
+      # Ação de checkout do código fonte do repositório
+      - uses: actions/checkout@v4
 
-        # Execução dos testes E2E
-        - name: 'Executando testes E2E'
-          run: yarn run e2e
-        
-        # relatório de testes
-        - uses: actions/upload-artifact@v4
-          # Se o job não foi cancelado, roda a ação de upload do relatório
-          if: ${{ !cancelled() }}  
-          with:
-            name: relatorio
-            path: ./playwright-report  # Caminho do relatório de testes Playwright
-          
-    deploy:
-      runs-on: ubuntu-latest  # Maquina/Ambiente onde o trabalho/job será executado
+      # Instalacao do node
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x' # Versão do Node.js a ser usada
 
-      steps:
-        - name: 'Simulação do Deploy'
-          run: echo "Simulando o deploy com sucesso!"  # Simulação de um deploy bem-sucedido
+      # Instalacao do Yarn
+      - name: 'Instalando Yarn'
+        run: npm install -g yarn
+
+      # Instalação das dependências
+      - name: 'Instalando dependencias'
+        run: yarn
+
+      # instalacap dp Playwright
+      - name: 'Instalando Playwright'
+        run: yarn playwright install
+
+      # Execução dos testes E2E
+      - name: 'Executando testes E2E'
+        run: yarn run e2e
+
+      # relatório de testes
+      - uses: actions/upload-artifact@v4
+        # Se o job não foi cancelado, roda a ação de upload do relatório
+        if: ${{ !cancelled() }}
+        with:
+          name: relatorio
+          path: ./playwright-report # Caminho do relatório de testes Playwright
+
+  deploy:
+    runs-on: ubuntu-latest # Maquina/Ambiente onde o trabalho/job será executado
+
+    steps:
+      - name: 'Simulação do Deploy'
+        run: echo "Simulando o deploy com sucesso!" # Simulação de um deploy bem-sucedido

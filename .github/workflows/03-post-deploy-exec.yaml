@@ -8,66 +8,62 @@ name: 'CI - Exercucao por Deploy'
 # Gatilho de execução agendada = schedule
 # Gatilho de execução apartir de outro pipe = workflow_run
 
-
 on:
   workflow_run:
     # Gatilho de execução após a conclusão de outro pipeline
-    workflows: ["CI - Manual Execution"]
+    workflows: ['CI - Manual Execution']
     types:
-      - completed  # O pipeline será disparado quando o outro pipeline for concluído
+      - completed # O pipeline será disparado quando o outro pipeline for concluído
       #- requested  # Quando o outro pipeline for solicitado
       #- in_progress  # Quando o outro pipeline estiver em andamento
 
-
 # trabalhos/tarefas dentro do pipeline = jobs
 jobs:
-    e2e-tests:
-        # Nome do trabalho
-        name: 'E2E Tests'
-        
-        # Maquina/Ambiente onde o trabalho/job será executado
-        runs-on: ubuntu-latest
-        
-        # Condição para executar o job apenas se o pipeline anterior foi concluído com sucesso
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
-        
-        # Passos do script build
-        # Cada passo é uma ação que será executada
-        steps:
-            
-          # Ações do GitHub Actions
-          # uses: é usado para ações pré-definidas do GitHub Actions
-          # run: é usado para executar comandos diretamente no ambiente do runner
+  e2e-tests:
+    # Nome do trabalho
+    name: 'E2E Tests'
 
-          # Clono do projeto
-          # Ação de checkout do código fonte do repositório 
-          - uses: actions/checkout@v4
-          
-          # Instalacao do node
-          - name: 'Setup Node.js'
-            uses: actions/setup-node@v4
-            with:
-              node-version: '22.x'  # Versão do Node.js a ser usada
+    # Maquina/Ambiente onde o trabalho/job será executado
+    runs-on: ubuntu-latest
 
-          # Instalacao do Yarn
-          - name: 'Instalando Yarn'
-            run: npm install -g yarn
-        
-          # Instalação das dependências
-          - name: 'Instalando dependencias'
-            run: yarn
-            
-          # instalacap dp Playwright
-          - name: 'Instalando Playwright'
-            run: yarn playwright install
-          # Execução dos testes E2E
-          - name: 'Executando testes E2E'
-            run: yarn run e2e
+    # Condição para executar o job apenas se o pipeline anterior foi concluído com sucesso
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
-          - uses: actions/upload-artifact@v4
-            # Se o job não foi cancelado, roda a ação de upload do relatório
-            if: ${{ !cancelled() }}  
-            with:
-              name: relarotio
-              path: ./playwright-report
-        
+    # Passos do script build
+    # Cada passo é uma ação que será executada
+    steps:
+      # Ações do GitHub Actions
+      # uses: é usado para ações pré-definidas do GitHub Actions
+      # run: é usado para executar comandos diretamente no ambiente do runner
+
+      # Clono do projeto
+      # Ação de checkout do código fonte do repositório
+      - uses: actions/checkout@v4
+
+      # Instalacao do node
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x' # Versão do Node.js a ser usada
+
+      # Instalacao do Yarn
+      - name: 'Instalando Yarn'
+        run: npm install -g yarn
+
+      # Instalação das dependências
+      - name: 'Instalando dependencias'
+        run: yarn
+
+      # instalacap dp Playwright
+      - name: 'Instalando Playwright'
+        run: yarn playwright install
+      # Execução dos testes E2E
+      - name: 'Executando testes E2E'
+        run: yarn run e2e
+
+      - uses: actions/upload-artifact@v4
+        # Se o job não foi cancelado, roda a ação de upload do relatório
+        if: ${{ !cancelled() }}
+        with:
+          name: relarotio
+          path: ./playwright-report

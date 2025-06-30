@@ -1,4 +1,4 @@
-# CI de nivel 01 - Disparo manual apartir de um clique 
+# CI de nivel 01 - Disparo manual apartir de um clique
 
 # Nome do nosso 'pipeline'
 name: 'CI - Manual Execution'
@@ -11,43 +11,41 @@ on:
 
 # trabalhos/tarefas dentro do pipeline = jobs
 jobs:
-    e2e-tests:
-        # Nome do trabalho
-        name: 'E2E Tests'
-        
-        # Maquina/Ambiente onde o trabalho/job será executado
-        runs-on: ubuntu-latest
+  e2e-tests:
+    # Nome do trabalho
+    name: 'E2E Tests'
 
-        # Passos do script build
-        # Cada passo é uma ação que será executada
-        steps:
-            
-          # Ações do GitHub Actions
-          # uses: é usado para ações pré-definidas do GitHub Actions
-          # run: é usado para executar comandos diretamente no ambiente do runner
+    # Maquina/Ambiente onde o trabalho/job será executado
+    runs-on: ubuntu-latest
 
-          # Clono do projeto
-          # Ação de checkout do código fonte do repositório 
-          - uses: actions/checkout@v4
-          
-          # Instalacao do node
-          - name: 'Setup Node.js'
-            uses: actions/setup-node@v4
-            with:
-              node-version: '22.x'  # Versão do Node.js a ser usada
+    # Passos do script build
+    # Cada passo é uma ação que será executada
+    steps:
+      # Ações do GitHub Actions
+      # uses: é usado para ações pré-definidas do GitHub Actions
+      # run: é usado para executar comandos diretamente no ambiente do runner
 
-          # Instalacao do Yarn
-          - name: 'Instalando Yarn'
-            run: npm install -g yarn
-        
-          # Instalação das dependências
-          - name: 'Instalando dependencias'
-            run: yarn
-            
-          # instalacap dp Playwright
-          - name: 'Instalando Playwright'
-            run: yarn playwright install
-          # Execução dos testes E2E
-          - name: 'Executando testes E2E'
-            run: yarn run e2e
-        
+      # Clono do projeto
+      # Ação de checkout do código fonte do repositório
+      - uses: actions/checkout@v4
+
+      # Instalacao do node
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x' # Versão do Node.js a ser usada
+
+      # Instalacao do Yarn
+      - name: 'Instalando Yarn'
+        run: npm install -g yarn
+
+      # Instalação das dependências
+      - name: 'Instalando dependencias'
+        run: yarn
+
+      # instalacap dp Playwright
+      - name: 'Instalando Playwright'
+        run: yarn playwright install
+      # Execução dos testes E2E
+      - name: 'Executando testes E2E'
+        run: yarn run e2e
